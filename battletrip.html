@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="categories/css/categories.css" />
+    <link rel="stylesheet" href="style.css" />
+    <title>Home</title>
+    <style>
+      body {
+        background-image: url("https://drive.google.com/uc?export=view&id=1Gr2niA9FwOKV9GNq0y6BRwtPRCuNsHsw");
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+        background-size: cover;
+        background-position: center;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div>
+      <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        
+        
+          <div class="navigation">
+            <nav class="nav d-flex">
+              <div class="logo">
+
+                  <img
+                    src="https://drive.google.com/uc?export=view&id=12cwRTtg0pBwG067qFQBFMH5pNhaaAAyM"
+                  />
+
+              </div>
+
+              <a
+                id="signoutlink"
+                style="background-color: #194569;"
+                href="index.html"
+                class="btn-sign-up"
+                >Sign Out</a
+              >
+            </nav>
+          </div>
+        </div>
+      </nav>
+
+      <h3 id="hh"></h3>
+    </div>
+
+    <script>
+      //----REFERENCES----//
+
+      let userlink = document.getElementById("userlink");
+      let signoutlink = document.getElementById("signoutlink");
+      let header = document.getElementById("hh");
+      var currentUser = null;
+
+      //----FUNCTION----//
+
+      function getUsername() {
+        let keepLoggedIn = localStorage.getItem("keepLoggedIn");
+
+        if (keepLoggedIn == "yes") {
+          currentUser = JSON.parse(localStorage.getItem("user"));
+        } else {
+          currentUser = JSON.parse(sessionStorage.getItem("user"));
+        }
+      }
+
+      function Signout() {
+        sessionStorage.removeItem("user");
+        localStorage.removeItem("user");
+        localStorage.removeItem("keepLoggedIn");
+        window.location = "login.html";
+      }
+
+      //----WINDOWS LOADS----//
+
+      window.onload = function () {
+        getUsername();
+        if (currentUser == null) {
+          userlink.innerText = "Create New Account";
+          userlink.classList.replace("btn-sign-up", "btn");
+          userlink.classList.add("btn-primary");
+          userlink.href = "register.html";
+
+          signoutlink.innerText = "Login";
+          signoutlink.classList.replace("btn-sign-up", "btn");
+          signoutlink.classList.add("btn-success");
+          signoutlink.href = "login.html";
+        } else {
+          userlink.innerText = currentUser.username;
+          userlink.classList.replace("btn", "btn-sign-up");
+          userlink.classList.remove("btn-primary");
+          userlink.href = "#";
+
+          signoutlink.innerText = "Sign Out";
+          signoutlink.classList.replace("btn", "btn-sign-up");
+          signoutlink.classList.remove("btn-success");
+          signoutlink.href = "javascript:Signout()";
+        }
+      };
+    </script>
+
+    <div style="margin-top: 7%; margin-left: 10%; margin-right: 10%;" class="grid">
+      <div style="margin-right: 15%;" class="grid-item">
+        <div  class="card">
+          <img
+            class="card-img"
+            src="https://drive.google.com/uc?export=view&id=1sPdD0qqC_ybXkRvcfFA1V5bUYLGmGZi2"
+            alt=" "
+          />
+          <div class="card-content">
+            <h1 class="card-header">Malangaan Cave</h1>
+            <p class="card-text">
+              A hidden gem located in Tukod, San Rafael, Bulacan, is a perfect
+              place for people looking for unspoiled places near Manila.
+            </p>
+            <a href="vote1.html"
+              ><button class="btn">VOTE</button></a
+            >
+          </div>
+        </div>
+      </div>
+      <div style="margin-left: 15%;" class="grid-item">
+        <div class="card">
+          <img
+            src="https://drive.google.com/uc?export=view&id=1uP1l-PLWnuYclfFhKz2lLIZfFcAY6bp4"
+            alt=" "
+          />
+          <div class="card-content">
+            <h1 class="card-header">Pinagrealan Cave</h1>
+            <p class="card-text">
+              This cave is a subterranean network of caverns extending more than
+              a kilometer deep.
+            </p>
+            <a href="vote2.html"
+              ><button class="btn">VOTE</button></a
+            >
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

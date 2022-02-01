@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login</title>
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+      integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+      crossorigin="anonymous"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+    <style>
+      body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        width: 100vw;
+        margin: 0px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="mb-5">
+      <h3 class="mb-3">Login</h3>
+      <input
+        type="text"
+        placeholder="Username"
+        id="userInp"
+        class="form-control mb-3"
+      />
+      <input
+        type="password"
+        placeholder="Password"
+        id="passInp"
+        class="form-control mb-3"
+      />
+      <div class="custom-control custom-switch mb-3">
+        <input
+          type="checkbox"
+          class="custom-control-input"
+          id="customSwitch1"
+        />
+        <!-- <label class="custom-control-label" for="customSwitch1"
+          >Keep me Logged In</label
+        > -->
+      </div>
+      <button
+        style="background-color: yellow;"
+        type="text"
+        id="sub_btn"
+        class="btn w-100 btn-outline-primary mb-3"
+      >
+        Sign In
+      </button>
+      <a href="register.html" class="badge badge-secondary py-1 w-100"
+        >Create a new account?</a
+      >
+    </div>
+
+    <script type="module">
+      //----FIREBASE CONFIG----//
+
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.5/firebase-app.js";
+
+      const firebaseConfig = {
+        apiKey: "AIzaSyDeYzdsqDmHwePZ3pJjxR3PwoiQAdqtbLQ",
+        authDomain: "loglogin-35335.firebaseapp.com",
+        databaseURL: "https://loglogin-35335-default-rtdb.firebaseio.com",
+        projectId: "loglogin-35335",
+        storageBucket: "loglogin-35335.appspot.com",
+        messagingSenderId: "1042331958806",
+        appId: "1:1042331958806:web:efa8b3baac9a45e299ff37"
+      };
+
+      const app = initializeApp(firebaseConfig);
+
+      import {
+        getDatabase,
+        ref,
+        set,
+        child,
+        get
+      } from "https://www.gstatic.com/firebasejs/9.6.5/firebase-database.js";
+
+      const db = getDatabase();
+
+      //----REFERENCES----//
+
+      const username = document.getElementById("userInp");
+      const pass = document.getElementById("passInp");
+      const submit = document.getElementById("sub_btn");
+
+      //----AUTHENTICATION PROCESS----//
+
+      function AuthenticateUser() {
+        const dbref = ref(db);
+
+        get(child(dbref, "UsersList/" + username.value)).then((snapshot) => {
+          if (snapshot.exists()) {
+            let dbpass = decPass(snapshot.val().password);
+            if (dbpass == pass.value) {
+              login(snapshot.val());
+            } else {
+              alert("Username or password is invalid");
+            }
+          } else {
+            alert("Username or Password is Invalid");
+          }
+        });
+      }
+
+      //----DECRYPT PROCESS----/
+
+      function decPass(dbpass) {
+        var pass12 = CryptoJS.AES.decrypt(dbpass, pass.value);
+        return pass12.toString(CryptoJS.enc.Utf8);
+      }
+
+      //----LOG IN----//
+
+      function login(user) {
+        let keepLoggedIn = document.getElementById("customSwitch1").checked;
+
+        if (!keepLoggedIn) {
+          sessionStorage.setItem("user", JSON.stringify(user));
+          window.location = "battletrip.html";
+        } else {
+          localStorage.setItem("keepLoggedIn", "yes");
+          localStorage.setItem("user", JSON.stringify(user));
+          window.location = "battletrip.html";
+        }
+      }
+      //----ASSIGN THE EVENTS----//
+
+      submit.addEventListener("click", AuthenticateUser);
+    </script>
+  </body>
+</html>
